@@ -54,8 +54,15 @@ public class SudokuSolver {
     }
     public boolean interpretRow(String input, Cell[] row) {
         for (int i = 0; i < input.length(); i++) {
-            
+            char c = input.charAt(i);
+
+            if (!(c == ' ') && !Character.isDigit(c))
+                return false;
+
+            row[i] = new Cell(Character.toString(c));
         }
+
+        return true;
     }
     
 
