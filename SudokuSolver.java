@@ -3,29 +3,37 @@ import java.util.*;
 
 public class SudokuSolver {
     private Grid userGrid;
-    private Grid solvedGrid;
+    private Grid solvedGrid;  //also points to userGrid
     
     private InputStreamReader isr;
     private BufferedReader in;
 
     public SudokuSolver() {
         userGrid = new Grid();
-        solvedGrid = new Grid();
         
         isr = new InputStreamReader( System.in );
         in = new BufferedReader( isr );
-        
-        queryGrid();
-        System.out.println(userGrid);
+
+        getGrid();
+        solvedGrid = userGrid;
     }
 
     //gets userGrid
+    public void getGrid() {
+        for (;;) {
+            queryGrid();
+            if (userGrid.isValid())
+                break;
+            System.out.println("Invalid sudoku board. Try again.\n");
+        }
+        System.out.println(userGrid);
+    }
     public void queryGrid() {
         int rowCounter = 0;
 
         Cell[] row = new Cell[9];
 
-        for (;;) {
+        while (rowCounter < 9) {
             String input = "";
             
             System.out.println("Please enter the  row " + rowCounter +
@@ -47,26 +55,39 @@ public class SudokuSolver {
 
             userGrid.setRow(rowCounter, row);
             rowCounter++;
-            if (rowCounter == 9)
-                break;
         }
         
     }
     public boolean interpretRow(String input, Cell[] row) {
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
-
-            if (!(c == ' ') && !Character.isDigit(c))
+            if (!(c == ' ') && !(Character.isDigit(c) && c != '0'))
                 return false;
-
             row[i] = new Cell(Character.toString(c));
         }
 
         return true;
     }
     
-
+    public void solve() {
+        Grid previousGrid = solvedGrid;
+        while (!solvedGrid.isSolved()) {
+            solveIterative();
+            if (previousGrid == solvedGrid) {
+                //to be implemented
+                System.out.println("A little hard to solve?");
+                return;
+            }
+        }
+    }
+    //iterate over cells, find what they can be
+    //if only 1 possibility, sets true
+    public void solveIterative() {
+        
+    }
+    
     public static void main(String[] args) {
         SudokuSolver ss = new SudokuSolver();
+        ss.solve();
     }
 }

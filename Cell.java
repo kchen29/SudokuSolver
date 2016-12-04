@@ -6,7 +6,7 @@ public class Cell {
     public String digit;
 
     public Cell() {
-	digit = "0";
+	digit = " ";
     }
     public Cell(String newDig) {
 	digit = newDig;
@@ -15,10 +15,15 @@ public class Cell {
 	digit = Integer.toString(newDig);
     }
 
+    /*
     public void removePossibleDig(String dig) {
         possibleDigits.remove(dig);
     }
-
+    */
+    public void setPossibleDig(String[] newPossibleDigits) {
+        possibleDigits = Arrays.asList(newPossibleDigits);
+    }
+    
     public String toString() {
         return digit;
     }
