@@ -31,9 +31,9 @@ public class SudokuSolver {
     public void queryGrid() {
         int rowCounter = 0;
 
-        Cell[] row = new Cell[9];
+        Cell[] row = new Cell[Grid.NUM_CELLS];
 
-        while (rowCounter < 9) {
+        while (rowCounter < Grid.NUM_CELLS) {
             String input = "";
             
             System.out.println("Please enter the  row " + rowCounter +
@@ -60,10 +60,10 @@ public class SudokuSolver {
     }
     public boolean interpretRow(String input, Cell[] row) {
         for (int i = 0; i < input.length(); i++) {
-            char c = input.charAt(i);
-            if (!(c == ' ') && !(Character.isDigit(c) && c != '0'))
+            String s = input.substring(i, i + 1);
+            if (Cell.DIGITS.indexOf(s) == -1)
                 return false;
-            row[i] = new Cell(Character.toString(c));
+            row[i] = new Cell(s);
         }
 
         return true;

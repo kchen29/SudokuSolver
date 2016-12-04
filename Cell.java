@@ -2,6 +2,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Cell {
+    public static final String DIGITS = "123456789";
+    
     public List<String> possibleDigits = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9");
     public String digit;
 

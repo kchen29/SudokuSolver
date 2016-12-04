@@ -25,6 +25,29 @@ public class Grid {
         cells[index] = row;
     }
 
+    public Cell[] getCol(int c) {
+        Cell[] col = new Cell[NUM_CELLS];
+        for (int i = 0; i < cells.length; i++) {
+            col[i] = cells[i][c];
+        }
+        return col;
+    }
+    public Cell[][] getBlock(int r, int c) {
+        Cell[][] block = new Cell[3][3];
+        
+        //locate top-left corner
+        r -= r % 3;
+        c -= c % 3;
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                block[i][j] = cells[r + i][c + j];
+            }
+        }
+
+        return block;
+    }
+    
     public boolean isValid() {
         //to be implemented
         return true;
@@ -42,15 +65,7 @@ public class Grid {
     }
     
     public String toString() {
-        String ret = "";
-        for (Cell[] r : cells) {
-            for (Cell c : r) {
-                ret += c + " ";
-            }
-            ret += "\n";
-        }
-
-        return ret;
+        return Utils.stringCell2(cells);
     }
     public static void main(String[] args) {
         Grid g = new Grid();
@@ -62,5 +77,12 @@ public class Grid {
         }
         g.setRow(1, r);
         System.out.println(g);
+
+        Utils.printCell1(g.getRow(0));
+        Utils.printCell1(g.getRow(1));
+        Utils.printCell1(g.getCol(0));
+        Utils.printCell1(g.getCol(1));
+        Utils.printCell2(g.getBlock(1, 1));
+        Utils.printCell2(g.getBlock(1, 4));
     }
 }
