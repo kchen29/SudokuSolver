@@ -1,7 +1,11 @@
 public class Grid {
+    //~~~~~STATIC VARIABLES
     public static final int NUM_CELLS = 9;
+
+    //~~~~~INSTANCE VARIABLES
     public Cell[][] cells;
 
+    //~~~~~CONSTRUCTORS
     public Grid() {
         cells = new Cell[NUM_CELLS][NUM_CELLS];
     }
@@ -18,6 +22,9 @@ public class Grid {
         cells = newCells;
     }
     */
+    
+    //~~~~~METHODS
+    //~~~get/set
     public Cell[] getRow(int r) {
         return cells[r];
     }
@@ -47,14 +54,17 @@ public class Grid {
 
         return block;
     }
-    
+
+    //~~~isValid
     public boolean isValid() {
         //to be implemented
         return true;
     }
+
+    //~~~isSolved
+    // assumes valid grid
     public boolean isSolved() {
         for (Cell[] r : cells) {
-
             for (Cell c : r) {
                 if (c.digit == " ")
                     return false;
@@ -63,10 +73,13 @@ public class Grid {
 
         return true;
     }
-    
+
+    //~~~toString
     public String toString() {
         return Utils.stringCell2(cells);
     }
+
+    //~~~~~MAIN
     public static void main(String[] args) {
         Grid g = new Grid();
         System.out.println(g);
