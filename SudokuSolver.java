@@ -26,7 +26,7 @@ public class SudokuSolver {
     public void getGrid() {
         for (;;) {
             queryGrid();
-            System.out.println(userGrid);
+            System.out.println("\n" + userGrid);
             if (userGrid.isValid())
                 break;
             System.out.println("Invalid sudoku board. Try again.\n");
