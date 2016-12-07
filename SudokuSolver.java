@@ -55,6 +55,11 @@ public class SudokuSolver {
                 continue;
             }
 
+            if (!Utils.allUnique(row)) {
+                System.out.println("Error: invalid row");
+                continue;
+            }
+            
             userGrid.setRow(rowCounter, row);
             rowCounter++;
         }
