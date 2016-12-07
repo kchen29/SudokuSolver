@@ -82,9 +82,10 @@ public class SudokuSolver {
             if (!solveIterative()) {
                 //to be implemented
                 System.out.println("A little hard to solve?");
-                return;
+                break;
             }
         }
+        System.out.println(solvedGrid);
     }
     
     /*Two implementations?:
