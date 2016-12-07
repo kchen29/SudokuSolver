@@ -1,5 +1,6 @@
 public class Grid {
     //~~~~~STATIC VARIABLES
+    //number of cells in a row
     public static final int NUM_CELLS = 9;
 
     //~~~~~INSTANCE VARIABLES
@@ -56,11 +57,29 @@ public class Grid {
     }
 
     //~~~isValid
+    //iterate through rows, cols, blocks, if more than one of same digit appears in
+    //row, col, or block, board is invalid (skip spaces)
     public boolean isValid() {
-        //to be implemented
+        for (int i = 0; i < NUM_CELLS; i++) {
+            Cell[] row = getRow(i);
+            if (!Utils.allUnique(row))
+                return false;
+            Cell[] col = getCol(i);
+            if (!Utils.allUnique(col))
+                return false;
+        }
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                Cell[][] block = getBlock(i * 3, j * 3);
+                if (!Utils.allUnique(block))
+                    return false;
+            }
+        }
         return true;
     }
 
+    
     //~~~isSolved
     // assumes valid grid
     public boolean isSolved() {
@@ -89,13 +108,35 @@ public class Grid {
             r[i] = new Cell(i + 1);
         }
         g.setRow(1, r);
+        g.setRow(5, r);
         System.out.println(g);
 
+        /*
         Utils.printCell1(g.getRow(0));
         Utils.printCell1(g.getRow(1));
         Utils.printCell1(g.getCol(0));
         Utils.printCell1(g.getCol(1));
         Utils.printCell2(g.getBlock(1, 1));
         Utils.printCell2(g.getBlock(1, 4));
+        Utils.printCell2(g.getBlock(3, 0));
+        /*/
+            
+        System.out.println(Utils.allUnique(r));
+        r[3] = new Cell(5);
+        Utils.printCell1(r);
+        System.out.println(Utils.allUnique(r));
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 9; j++) {
+                int dig = (j + 3 * i + 3) % 9 + 1;
+                g.cells[i][j] = new Cell(dig);
+            }
+        }
+        Utils.printCell2(g.cells);
+        System.out.println(Utils.allUnique(g.getBlock(0, 0)));
+        
+        g.cells[0] = r;
+        Utils.printCell2(g.cells);
+        System.out.println(Utils.allUnique(g.getBlock(0, 0)));        
     }
 }
