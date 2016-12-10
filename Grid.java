@@ -85,7 +85,7 @@ public class Grid {
     public boolean isSolved() {
         for (Cell[] r : cells) {
             for (Cell c : r) {
-                if (c.digit == " ")
+                if (c.digit.equals(" "))
                     return false;
             }
         }

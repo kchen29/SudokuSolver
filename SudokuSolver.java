@@ -125,10 +125,13 @@ public class SudokuSolver {
                 break;
             }
         }
+        
+        if (solvedGrid.isValid() && solvedGrid.isSolved())
+            System.out.println("\nSudoku Grid is valid and solved!\n");
         System.out.println(solvedGrid);
     }
     
-    /*Two implementations?:
+    /*Two possible implementations?:
       1. iterate over cells w/o digits and check what digit they are (can be)
       2. iterate over cells w/ digits and filter other cells (what they can't be)
            with addedCells, iterate only over those
@@ -142,11 +145,49 @@ public class SudokuSolver {
     //if 1 cell's digit was added, set vals[1] true;
     public boolean[] solveIterative() {
         boolean[] vals = new boolean[2];
+        for (int r = 0; r < Grid.NUM_CELLS; r++) {
+            for (int c  = 0; c < Grid.NUM_CELLS; c++) {
+                if (!solvedGrid.cells[r][c].digit.equals(" "))
+                    continue;
+
+                //https://stackoverflow.com/questions/2965747/why-i-get-unsupportedoperationexception-when-trying-to-remove-from-the-list
+                List<String> possibleDigs = new LinkedList<String>(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9"));
+                
+                Cell[] row = solvedGrid.getRow(r);
+                for (Cell check : row) {
+                    filter(possibleDigs, check);
+                }
+
+                Cell[] col = solvedGrid.getCol(c);
+                for (Cell check : col) {
+                    filter(possibleDigs, check);
+                }
+
+                Cell[][] block = solvedGrid.getBlock(r, c);
+                for (Cell[] ro : block) {
+                    for (Cell check : ro) {
+                        filter(possibleDigs, check);
+                    }
+                }
+
+                if (possibleDigs.size() == 1) {
+                    solvedGrid.cells[r][c].digit = possibleDigs.get(0);
+                    vals[1] = true;
+                } else if (possibleDigs.isEmpty()) {
+                    vals[0] = true;
+                    return vals;
+                }
+            }
+        }
         
-        //to be implemented
         return vals;
     }
-
+    public void filter(List<String> possibleDigs, Cell check) {
+        String checkDig = check.digit;
+        if (possibleDigs.contains(checkDig)) {
+            possibleDigs.remove(checkDig);
+        }
+    }
     //~~~~~MAIN
     public static void main(String[] args) {
         SudokuSolver ss = new SudokuSolver();
