@@ -78,7 +78,7 @@ public class SudokuSolver {
         }
     }
     public static List<String> queryLines() {
-        Path file = Paths.get("exampleSudokuBoard.txt");
+        Path file = Paths.get("ESB/exampleSudokuBoard.txt");
         try {
             return Files.readAllLines(file);
         } catch (IOException e) {
