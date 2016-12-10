@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.nio.file.*;
 
 public class SudokuSolver {
     //~~~~~INSTANCE VARIABLES
@@ -33,16 +34,20 @@ public class SudokuSolver {
         }
     }
     public void queryGrid() {
+        //int type = getType();
+        int type = 2;
+
+        //for type 2
+        List<String> lines = getLines();
+        if (lines.size() < 9)
+            return;
+        
         int rowCounter = 0;
         String input = "";
         
         while (rowCounter < Grid.NUM_CELLS) {
-            System.out.println("Please enter row " + rowCounter +
-                               " (input spaces for empty cell):");
-            try {
-                input = in.readLine();
-            }
-            catch ( IOException e) { }
+
+            input = getInput(type, lines, rowCounter);
 
             if (input.length() != 9) {
                 System.out.println("Error: length is not 9. Try again");
@@ -54,7 +59,6 @@ public class SudokuSolver {
                 System.out.println("Error interpreting row");
                 continue;
             }
-
             if (!Utils.allUnique(row)) {
                 System.out.println("Error: invalid row");
                 continue;
@@ -64,6 +68,34 @@ public class SudokuSolver {
             rowCounter++;
         }
         
+    }
+    public int getType() {
+        System.out.println("Method of input:\n1. Type row by row\n2. File input");
+        try {
+            return Integer.parseInt(in.readLine());
+        } catch (IOException e) {
+            return 2;
+        }
+    }
+    public static List<String> getLines() {
+        Path file = Paths.get("exampleSudokuBoard.txt");
+        try {
+            return Files.readAllLines(file);
+        } catch (IOException e) {
+            return new ArrayList<String>();
+        }
+    }
+    public String getInput(int type, List<String> lines, int rowCounter) {
+        if (type == 2)
+            return lines.get(rowCounter);
+        
+        System.out.println("Please enter row " + rowCounter +
+                           " (input spaces for empty cell):");
+        try {
+            return in.readLine();
+        } catch ( IOException e) {
+            return "";
+        }
     }
     public boolean interpretRow(String input, Cell[] row) {
         for (int i = 0; i < input.length(); i++) {
@@ -78,8 +110,16 @@ public class SudokuSolver {
 
     //~~~solve
     public void solve() {
+        //vals: invalid grid, added cells
+        boolean[] vals;
+        
         while (!solvedGrid.isSolved()) {
-            if (!solveIterative()) {
+            vals = solveIterative();
+            if (vals[0]) {
+                System.out.println("Invalid grid");
+                break;
+            }
+            if (!vals[1]) {
                 //to be implemented
                 System.out.println("A little hard to solve?");
                 break;
@@ -97,10 +137,14 @@ public class SudokuSolver {
     */
     //iterate over cells, find what they can be
     //if only 1 possibility, set digit
-    //return true if at least 1 cell's digit was determined; false otherwise
-    public boolean solveIterative() {
+    //if 0 possibilites, grid is invalid
+    //if the grid is invalid, set vals[0] true;
+    //if 1 cell's digit was added, set vals[1] true;
+    public boolean[] solveIterative() {
+        boolean[] vals = new boolean[2];
+        
         //to be implemented
-        return true;
+        return vals;
     }
 
     //~~~~~MAIN
