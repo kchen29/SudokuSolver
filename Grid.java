@@ -12,19 +12,6 @@ public class Grid {
     public Grid() {
         cells = new Cell[NUM_CELLS][NUM_CELLS];
     }
-    /*
-    //values: rows contains row, column, and value
-    public Grid(int[][] values) {
-        this();
-        for (int[] r : values) {
-            Cell c = new Cell(r[2]);
-            cells[r[0]][r[1]] = c;
-        }
-    }
-    public Grid(Cell[][] newCells) {
-        cells = newCells;
-    }
-    */
     
     //~~~~~METHODS
     //~~~get/set
@@ -132,14 +119,14 @@ public class Grid {
         System.out.println(g);
 
         /*
-        Utils.printCell1(g.getRow(0));
-        Utils.printCell1(g.getRow(1));
-        Utils.printCell1(g.getCol(0));
-        Utils.printCell1(g.getCol(1));
-        Utils.printCell2(g.getBlock(1, 1));
-        Utils.printCell2(g.getBlock(1, 4));
-        Utils.printCell2(g.getBlock(3, 0));
-        /*/
+          Utils.printCell1(g.getRow(0));
+          Utils.printCell1(g.getRow(1));
+          Utils.printCell1(g.getCol(0));
+          Utils.printCell1(g.getCol(1));
+          Utils.printCell2(g.getBlock(1, 1));
+          Utils.printCell2(g.getBlock(1, 4));
+          Utils.printCell2(g.getBlock(3, 0));
+          /*/
             
         System.out.println(Utils.allUnique(r));
         r[3] = new Cell(5);
@@ -157,6 +144,6 @@ public class Grid {
         
         g.cells[0] = r;
         Utils.printCell2(g.cells);
-        System.out.println(Utils.allUnique(g.getBlock(0, 0)));        
+        System.out.println(Utils.allUnique(g.getBlock(0, 0)));
     }
 }

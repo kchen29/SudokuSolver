@@ -11,25 +11,16 @@ public class Cell {
 
     //~~~~~CONSTRUCTORS
     public Cell() {
-	digit = " ";
+        digit = " ";
     }
     public Cell(String newDig) {
-	digit = newDig;
+        digit = newDig;
     }
     public Cell(int newDig) {
-	digit = Integer.toString(newDig);
+        digit = Integer.toString(newDig);
     }
 
     //~~~~~METHODS
-    /*
-    public void removePossibleDig(String dig) {
-        possibleDigits.remove(dig);
-    }
-    
-    public void setPossibleDig(String[] newPossibleDigits) {
-        possibleDigits = Arrays.asList(newPossibleDigits);
-    }
-    */
     public boolean hasDigit() {
         return !hasNoDigit();
     }
@@ -43,8 +34,7 @@ public class Cell {
 
     //~~~~~MAIN
     public static void main(String[] args) {
-	Cell c = new Cell(2);
-	System.out.println(c.digit);
-        //Utils.printList(c.possibleDigits);
+        Cell c = new Cell(2);
+        System.out.println(c.digit);
     }
 }

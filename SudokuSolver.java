@@ -138,7 +138,7 @@ public class SudokuSolver {
     /*Two possible implementations?:
       1. iterate over cells w/o digits and check what digit they are (can be)
       2. iterate over cells w/ digits and filter other cells (what they can't be)
-           with addedCells, iterate only over those
+      with addedCells, iterate only over those
 
       we'll do 1.
     */
@@ -179,7 +179,7 @@ public class SudokuSolver {
       iterate over row/col/block
       if digit of a cell is unique to row/col/block, set the cell's digit as that digit
       if 1 cell's digit was added, set vals[1] true;
-     */
+    */
     
     public boolean[] OPIRCB() {
         List<Object[]> toAdd = new LinkedList<Object[]>();
@@ -231,19 +231,19 @@ public class SudokuSolver {
         ss.solve();
 
         /*
-        ss.userGrid.updatePossibleDigits();
+          ss.userGrid.updatePossibleDigits();
 
-        for (Cell[] row : ss.userGrid.getBlock(0,6)) {
-            for (Cell c : row) {
-                if (c.hasNoDigit())
-                    Utils.printList(c.possibleDigits);
-            }
-            System.out.println();
-        }
+          for (Cell[] row : ss.userGrid.getBlock(0,6)) {
+          for (Cell c : row) {
+          if (c.hasNoDigit())
+          Utils.printList(c.possibleDigits);
+          }
+          System.out.println();
+          }
 
-        ss.OPIRCB();
+          ss.OPIRCB();
 
-        Utils.printCell2(ss.solvedGrid.cells);
+          Utils.printCell2(ss.solvedGrid.cells);
         */
     }
 }
