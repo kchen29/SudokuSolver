@@ -34,11 +34,11 @@ public class SudokuSolver {
         }
     }
     public void queryGrid() {
-        //int type = getType();
+        //int type = queryType();
         int type = 2;
 
         //for type 2
-        List<String> lines = getLines();
+        List<String> lines = queryLines();
         if (lines.size() < 9)
             return;
         
@@ -47,7 +47,7 @@ public class SudokuSolver {
         
         while (rowCounter < Grid.NUM_CELLS) {
 
-            input = getInput(type, lines, rowCounter);
+            input = queryInput(type, lines, rowCounter);
 
             if (input.length() != 9) {
                 System.out.println("Error: length is not 9. Try again");
@@ -69,7 +69,7 @@ public class SudokuSolver {
         }
         
     }
-    public int getType() {
+    public int queryType() {
         System.out.println("Method of input:\n1. Type row by row\n2. File input");
         try {
             return Integer.parseInt(in.readLine());
@@ -77,7 +77,7 @@ public class SudokuSolver {
             return 2;
         }
     }
-    public static List<String> getLines() {
+    public static List<String> queryLines() {
         Path file = Paths.get("exampleSudokuBoard.txt");
         try {
             return Files.readAllLines(file);
@@ -85,7 +85,7 @@ public class SudokuSolver {
             return new ArrayList<String>();
         }
     }
-    public String getInput(int type, List<String> lines, int rowCounter) {
+    public String queryInput(int type, List<String> lines, int rowCounter) {
         if (type == 2)
             return lines.get(rowCounter);
         
@@ -130,7 +130,8 @@ public class SudokuSolver {
             System.out.println("\nSudoku Grid is valid and solved!\n");
         System.out.println(solvedGrid);
     }
-    
+
+    //"Only possiblity for cell" method
     /*Two possible implementations?:
       1. iterate over cells w/o digits and check what digit they are (can be)
       2. iterate over cells w/ digits and filter other cells (what they can't be)
@@ -138,13 +139,14 @@ public class SudokuSolver {
 
       we'll do 1.
     */
-    //iterate over cells, find what they can be
-    //if only 1 possibility, set digit
-    //if 0 possibilites, grid is invalid
-    //if the grid is invalid, set vals[0] true;
-    //if 1 cell's digit was added, set vals[1] true;
+    /*iterate over cells, find what they can be
+      if only 1 possibility, set digit
+      if 0 possibilites, grid is invalid
+      if the grid is invalid, set vals[0] true;
+      if 1 cell's digit was added, set vals[1] true;
+    */
     public boolean[] solveIterative() {
-        boolean[] vals = new boolean[2];
+        boolean[] vals = {false, false};
         for (int r = 0; r < Grid.NUM_CELLS; r++) {
             for (int c  = 0; c < Grid.NUM_CELLS; c++) {
                 if (!solvedGrid.cells[r][c].digit.equals(" "))
@@ -175,6 +177,7 @@ public class SudokuSolver {
                     vals[1] = true;
                 } else if (possibleDigs.isEmpty()) {
                     vals[0] = true;
+                    System.out.println("debug: r: " + r + "\tc: " + c);
                     return vals;
                 }
             }
@@ -188,6 +191,9 @@ public class SudokuSolver {
             possibleDigs.remove(checkDig);
         }
     }
+
+    //"Only possiblity in row/col/block" method
+    
     //~~~~~MAIN
     public static void main(String[] args) {
         SudokuSolver ss = new SudokuSolver();
