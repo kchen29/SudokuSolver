@@ -6,6 +6,8 @@ public class SudokuSolver {
     //~~~~~INSTANCE VARIABLES
     private Grid userGrid;
     private Grid solvedGrid;  //also points to userGrid
+
+    private int[] iterations;
     
     private InputStreamReader isr;
     private BufferedReader in;
@@ -13,6 +15,8 @@ public class SudokuSolver {
     //~~~~~CONSTRUCTORS
     public SudokuSolver() {
         userGrid = new Grid();
+        
+        iterations = new int[2];
         
         isr = new InputStreamReader( System.in );
         in = new BufferedReader( isr );
@@ -105,13 +109,15 @@ public class SudokuSolver {
         
         while (!solvedGrid.isSolved()) {
             vals = solveIterative();
+            
             if (vals[0]) {
                 System.out.println("Invalid grid\n");
                 break;
             }
             if (!vals[1]) {
                 //to be implemented
-                System.out.println("A little hard to solve?\n");
+                System.out.println("A little hard to solve?");
+                System.out.println("(" + iterations[0] + " + " + iterations[1] + " iterations)\n");
                 if (!solvedGrid.isValid())
                     System.out.println("invalid grid!");
                 break;
@@ -119,15 +125,18 @@ public class SudokuSolver {
         }
         
         if (solvedGrid.isValid() && solvedGrid.isSolved())
-            System.out.println("\nSudoku Grid is valid and solved!\n");
+            System.out.println("\nSudoku Grid is valid and solved " + "in " + iterations[0] + " + " + iterations[1] + " iterations!\n");
         System.out.println(solvedGrid);
     }
 
     public boolean[] solveIterative() {
         boolean[] vals = OPFC();
+        iterations[0]++;
+        
         if (vals[0])
             return vals;
         if (!vals[1]) {
+            iterations[1]++;
             solvedGrid.updatePossibleDigits();
             return OPIRCB();
         }

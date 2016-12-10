@@ -39,7 +39,7 @@ public final class Utils {
         return true;
     }
     
-    //skip spaces
+    //skip cells with no digits
     //true if each Cell has a different digit from the rest
     public static boolean allUnique(Cell[] arr) {
         int[] carry = new int[Grid.NUM_CELLS];
