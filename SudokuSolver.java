@@ -55,7 +55,7 @@ public class SudokuSolver {
             }
 
             Cell[] row = new Cell[Grid.NUM_CELLS];
-            if (!interpretRow(input, row)) {
+            if (!Utils.interpretRow(input, row)) {
                 System.out.println("Error interpreting row");
                 continue;
             }
@@ -97,16 +97,6 @@ public class SudokuSolver {
             return "";
         }
     }
-    public boolean interpretRow(String input, Cell[] row) {
-        for (int i = 0; i < input.length(); i++) {
-            String s = input.substring(i, i + 1);
-            if (!s.equals(" ") && Cell.DIGITS.indexOf(s) == -1)
-                return false;
-            row[i] = new Cell(s);
-        }
-
-        return true;
-    }
 
     //~~~solve
     public void solve() {
@@ -116,12 +106,14 @@ public class SudokuSolver {
         while (!solvedGrid.isSolved()) {
             vals = solveIterative();
             if (vals[0]) {
-                System.out.println("Invalid grid");
+                System.out.println("Invalid grid\n");
                 break;
             }
             if (!vals[1]) {
                 //to be implemented
-                System.out.println("A little hard to solve?");
+                System.out.println("A little hard to solve?\n");
+                if (!solvedGrid.isValid())
+                    System.out.println("invalid grid!");
                 break;
             }
         }
@@ -131,6 +123,17 @@ public class SudokuSolver {
         System.out.println(solvedGrid);
     }
 
+    public boolean[] solveIterative() {
+        boolean[] vals = OPFC();
+        if (vals[0])
+            return vals;
+        if (!vals[1]) {
+            solvedGrid.updatePossibleDigits();
+            return OPIRCB();
+        }
+        return vals;
+    }
+    
     //"Only possiblity for cell" method
     /*Two possible implementations?:
       1. iterate over cells w/o digits and check what digit they are (can be)
@@ -145,32 +148,17 @@ public class SudokuSolver {
       if the grid is invalid, set vals[0] true;
       if 1 cell's digit was added, set vals[1] true;
     */
-    public boolean[] solveIterative() {
+    public boolean[] OPFC() {
         boolean[] vals = {false, false};
         for (int r = 0; r < Grid.NUM_CELLS; r++) {
             for (int c  = 0; c < Grid.NUM_CELLS; c++) {
-                if (!solvedGrid.cells[r][c].digit.equals(" "))
+                if (solvedGrid.cells[r][c].hasDigit())
                     continue;
 
                 //https://stackoverflow.com/questions/2965747/why-i-get-unsupportedoperationexception-when-trying-to-remove-from-the-list
                 List<String> possibleDigs = new LinkedList<String>(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9"));
                 
-                Cell[] row = solvedGrid.getRow(r);
-                for (Cell check : row) {
-                    filter(possibleDigs, check);
-                }
-
-                Cell[] col = solvedGrid.getCol(c);
-                for (Cell check : col) {
-                    filter(possibleDigs, check);
-                }
-
-                Cell[][] block = solvedGrid.getBlock(r, c);
-                for (Cell[] ro : block) {
-                    for (Cell check : ro) {
-                        filter(possibleDigs, check);
-                    }
-                }
+                Utils.filterRCB(solvedGrid, r, c, possibleDigs);
 
                 if (possibleDigs.size() == 1) {
                     solvedGrid.cells[r][c].digit = possibleDigs.get(0);
@@ -185,18 +173,77 @@ public class SudokuSolver {
         
         return vals;
     }
-    public void filter(List<String> possibleDigs, Cell check) {
-        String checkDig = check.digit;
-        if (possibleDigs.contains(checkDig)) {
-            possibleDigs.remove(checkDig);
-        }
-    }
 
     //"Only possiblity in row/col/block" method
+    /*
+      iterate over row/col/block
+      if digit of a cell is unique to row/col/block, set the cell's digit as that digit
+      if 1 cell's digit was added, set vals[1] true;
+     */
+    
+    public boolean[] OPIRCB() {
+        List<Object[]> toAdd = new LinkedList<Object[]>();
+        
+        //accumulate changes to be made (if done in spot, have to update possible digits)
+        for (int r = 0; r < Grid.NUM_CELLS; r++) {
+            for (int c = 0; c < Grid.NUM_CELLS; c++) {
+                if (solvedGrid.cells[r][c].hasDigit())
+                    continue;
+
+                accumulateChange(toAdd, r, c);
+            }
+        }
+
+        causeChange(toAdd);
+        
+        boolean[] vals = {false, false};
+        if (!toAdd.isEmpty())
+            vals[1] = true;
+        
+        return vals;
+    }
+    public void accumulateChange(List<Object[]> toAdd, int r, int c) {
+        Cell cell = solvedGrid.cells[r][c];
+        
+        Cell[] row = solvedGrid.getRow(r);
+        Cell[] col = solvedGrid.getCol(c);
+        Cell[][] block = solvedGrid.getBlock(r, c);
+
+        for (String dig : cell.possibleDigits) {
+            if (!Utils.isUnique(dig, cell, row) && !Utils.isUnique(dig, cell, col) && !Utils.isUnique(dig, cell, block))
+                continue;
+            Object[] add = {cell, dig};
+            toAdd.add(add);
+            return;
+        }
+    }
+    public void causeChange(List<Object[]> toAdd) {
+        for (Object[] add : toAdd) {
+            Cell cell = (Cell) add[0];
+            String dig = (String) add[1];
+            cell.digit = dig;
+        }
+    }
     
     //~~~~~MAIN
     public static void main(String[] args) {
         SudokuSolver ss = new SudokuSolver();
         ss.solve();
+
+        /*
+        ss.userGrid.updatePossibleDigits();
+
+        for (Cell[] row : ss.userGrid.getBlock(0,6)) {
+            for (Cell c : row) {
+                if (c.hasNoDigit())
+                    Utils.printList(c.possibleDigits);
+            }
+            System.out.println();
+        }
+
+        ss.OPIRCB();
+
+        Utils.printCell2(ss.solvedGrid.cells);
+        */
     }
 }

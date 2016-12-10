@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Grid {
     //~~~~~STATIC VARIABLES
     //number of cells in a row
@@ -85,7 +87,7 @@ public class Grid {
     public boolean isSolved() {
         for (Cell[] r : cells) {
             for (Cell c : r) {
-                if (c.digit.equals(" "))
+                if (c.hasNoDigit())
                     return false;
             }
         }
@@ -93,6 +95,24 @@ public class Grid {
         return true;
     }
 
+    
+    //~~~updatePossibleDigits
+    public void updatePossibleDigits() {
+        for (int r = 0; r < NUM_CELLS; r++) {
+            for (int c = 0; c < NUM_CELLS; c++) {
+                if (cells[r][c].hasDigit())
+                    continue;
+                
+                List<String> possibleDigs = new LinkedList<String>(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9"));
+
+                Utils.filterRCB(this, r, c, possibleDigs);
+                
+                cells[r][c].possibleDigits = possibleDigs;
+            }
+        }
+    }
+    
+    
     //~~~toString
     public String toString() {
         return Utils.stringCell2(cells);

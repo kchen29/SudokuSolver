@@ -6,7 +6,7 @@ public class Cell {
     public static final String DIGITS = "123456789";
 
     //~~~~~INSTANCE VARIABLES
-    //public List<String> possibleDigits = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9");
+    public List<String> possibleDigits;
     public String digit;
 
     //~~~~~CONSTRUCTORS
@@ -30,6 +30,12 @@ public class Cell {
         possibleDigits = Arrays.asList(newPossibleDigits);
     }
     */
+    public boolean hasDigit() {
+        return !hasNoDigit();
+    }
+    public boolean hasNoDigit() {
+        return digit.equals(" ");
+    }
     
     public String toString() {
         return digit;
