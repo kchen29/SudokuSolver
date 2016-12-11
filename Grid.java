@@ -102,7 +102,24 @@ public class Grid {
     
     //~~~toString
     public String toString() {
-        return Utils.stringCell2(cells);
+        //return Utils.stringCell2(cells);
+        String ret = "";
+        for (int r = 0; r < NUM_CELLS; r++) {
+            for (int c = 0; c < NUM_CELLS; c++) {
+                if (c == 3 || c == 6)
+                    ret += "│";
+                ret += cells[r][c];
+            }
+            if (r == 2 || r == 5) {
+                String line = "───┼───┼───";
+                ret += "\n" + line + "\n";
+            } else {
+                ret += "\n";
+            }
+            
+        }
+
+        return ret;
     }
 
     //~~~~~MAIN
