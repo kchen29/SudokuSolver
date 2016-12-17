@@ -108,10 +108,13 @@ public class Grid {
             for (int c = 0; c < NUM_CELLS; c++) {
                 if (c == 3 || c == 6)
                     ret += "│";
-                ret += cells[r][c];
+                if (c % 3 == 0)
+                    ret += cells[r][c];
+                else
+                    ret += " " + cells[r][c];
             }
             if (r == 2 || r == 5) {
-                String line = "───┼───┼───";
+                String line = "─────┼─────┼─────";
                 ret += "\n" + line + "\n";
             } else {
                 ret += "\n";
